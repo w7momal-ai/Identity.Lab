@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDENTITY.LAB — Independent Editorial on AI, Privacy & Identity</title>
+    
+    <!-- Google Fonts: Playfair Display, DM Sans, DM Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandBg: '#121111',
+                        brandCardBg: '#181717',
+                        brandCardBorder: '#282626',
+                        brandRed: '#C83232',
+                        brandRedDark: '#A62424',
+                        brandOffWhite: '#F0EEE8',
+                        brandGrey: '#969696',
+                        taupeBg: '#C5B9B7',
+                        taupeText: '#2B2625',
+                        taupeSubtext: '#4A4341'
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'Georgia', 'serif'],
+                        sans: ['"DM Sans"', 'sans-serif'],
+                        mono: ['"DM Mono"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Fine Detail Styling */
+        body {
+            background-color: #121111;
+            color: #F0EEE8;
+            font-family: 'DM Sans', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Red accent rules */
+        .red-line {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(200,50,50,0.8) 0%, rgba(200,50,50,0.1) 70%, transparent 100%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C83232;
+        }
+
+        /* Subtle Fade In Modal Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-modal {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+
+        /* Left vertical highlight border for Taupe cards */
+        .red-bar-left {
+            border-left: 3px solid #C83232;
+            padding-left: 1rem;
+        }
+
+        /* Underline accent removed to keep typography clean */
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brandRed selection:text-white">
+
+    <!-- TOP STICKY NAVIGATION HEADER -->
+    <header class="sticky top-0 z-40 bg-[#121111]/95 backdrop-blur-md border-b border-[#222]">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#" class="font-mono text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center">
+                <span>IDENTITY.</span><span class="text-brandRed">LAB</span>
+            </a>
+
+            <!-- Right Controls -->
+            <div class="flex items-center space-x-4 sm:space-x-6">
+                <button onclick="openModal('subscribeModal')" class="bg-brandRed hover:bg-brandRedDark transition-colors text-white font-mono text-sm px-5 py-2 rounded-sm font-medium tracking-wide">
+                    Subscribe
+                </button>
+                
+                <!-- Hamburger Menu Button -->
+                <button id="menuBtn" onclick="toggleNavMenu()" class="p-1 text-white hover:text-brandRed transition-colors focus:outline-none" aria-label="Toggle navigation">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Fullscreen Dropdown Navigation Overlay -->
+        <div id="navMenu" class="hidden bg-[#181717] border-b border-[#282626] transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-6 py-6 grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-sm">
+                <div>
+                    <span class="text-brandRed text-xs uppercase tracking-wider block mb-2">// Navigation</span>
+                    <ul class="space-y-2 text-brandOffWhite">
+                        <li><a href="#hero" onclick="toggleNavMenu()" class="hover:text-brandRed transition-colors">Home</a></li>
+                        <li><a href="#case-files" onclick="toggleNavMenu()" class="hover:text-brandRed transition-colors">Documented Cases</a></li>
+                        <li><a href="#reporting-explained" onclick="toggleNavMenu()" class="hover:text-brandRed transition-colors">Reporting, Explained</a></li>
+                        <li><a href="#before-handover" onclick="toggleNavMenu()" class="hover:text-brandRed transition-colors">Data Checklist</a></li>
+                        <li><a href="#about" onclick="toggleNavMenu()" class="hover:text-brandRed transition-colors">About Publication</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <span class="text-brandRed text-xs uppercase tracking-wider block mb-2">// Key Topics</span>
+                    <ul class="space-y-2 text-brandGrey text-xs">
+                        <li>AI & Identity Synthesis</li>
+                        <li>Non-Consensual Image Abuse</li>
+                        <li>NIST Facial Recognition Bias</li>
+                        <li>DRF Pakistan Helpline Data</li>
+                        <li>UNESCO Generative AI Policy</li>
+                    </ul>
+                </div>
+                <div class="col-span-2">
+                    <span class="text-brandRed text-xs uppercase tracking-wider block mb-2">// Direct Search</span>
+                    <div class="relative">
+                        <input type="text" id="searchInput" onkeyup="filterArticles()" placeholder="Search investigations, topics, or sources..." class="w-full bg-[#121111] border border-[#333] text-brandOffWhite text-xs px-4 py-3 rounded focus:outline-none focus:border-brandRed">
+                        <div id="searchResults" class="absolute left-0 right-0 top-full mt-1 bg-[#1A1919] border border-[#333] rounded hidden max-h-48 overflow-y-auto z-50 text-xs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-8 space-y-24">
+
+        <!-- SECTION 1: HERO SECTION (Exact layout as Screenshot 1) -->
+        <section id="hero" class="relative pt-8 pb-16 border-b border-[#222]">
+            <div class="w-full h-px bg-[#282626] mb-12"></div>
+
+            <div class="max-w-4xl space-y-8">
+                <!-- Main Headline in Playfair Display -->
+                <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[1.08] text-brandOffWhite">
+                    Your Identity<br>Is Not a Dataset.
+                </h1>
+
+                <!-- Sub-description in DM Sans -->
+                <p class="font-sans text-brandGrey text-lg sm:text-xl md:text-2xl max-w-2xl font-light leading-relaxed">
+                    AI can create, identify and imitate at extraordinary speed. The harder questions are about consent, accountability and the people left to deal with the consequences.
+                </p>
+
+                <!-- Red CTA Button -->
+                <div class="pt-4">
+                    <button onclick="openModal('heroModal')" class="group inline-flex items-center space-x-3 bg-brandRed hover:bg-brandRedDark transition-all text-white px-7 py-4 rounded-sm font-sans font-medium text-base tracking-wide shadow-lg">
+                        <span>Enter to know</span>
+                        <span class="transform group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Subtle Grid Accent Lines (Screenshot 1 visual accent) -->
+            <div class="mt-20 space-y-2 opacity-30">
+                <div class="h-px bg-brandRed w-3/4"></div>
+                <div class="h-px bg-brandRed w-1/2 ml-auto"></div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 2: DOCUMENTED CASE FILES (Exact layout from Screenshot 2 / 2 f.png) -->
+        <section id="case-files" class="space-y-8">
+            <!-- Section Header -->
+            <div>
+                <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-brandOffWhite">
+                    Documented Case Files.
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Main Card: Pakistan DRF Report (7 cols) -->
+                <div class="lg:col-span-7 bg-brandCardBg border border-brandCardBorder p-8 sm:p-10 rounded-sm flex flex-col justify-between space-y-8 hover:border-[#383535] transition-colors">
+                    <div class="space-y-6">
+                        <!-- Category Tag -->
+                        <span class="font-mono text-brandRed text-sm sm:text-base tracking-wide block">
+                            Pakistan · Digital Rights Foundation
+                        </span>
+
+                        <!-- Main Headline -->
+                        <h3 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium text-brandOffWhite leading-tight">
+                            Online harm is not an abstract problem.
+                        </h3>
+
+                        <!-- Body Paragraph -->
+                        <p class="font-sans text-brandOffWhite text-sm sm:text-base leading-relaxed opacity-90">
+                            Digital Rights Foundation’s 2025 Digital Security Helpline report describes cyber harassment, non-consensual image abuse, impersonation and AI-generated manipulation among the evolving risks people report. The total figures below cover the helpline’s wider caseload — <strong class="font-bold text-white">they are not AI-only counts.</strong>
+                        </p>
+
+                        <!-- Stat Highlight -->
+                        <div class="pt-4 space-y-2">
+                            <div class="font-serif text-6xl sm:text-7xl md:text-8xl font-bold text-white tracking-tight">
+                                3,012
+                            </div>
+                            <p class="font-sans text-xs sm:text-sm text-brandGrey">
+                                New complaints received by DRF’s Digital Security Helpline during 2025.
+                            </p>
+                        </div>
+
+                        <!-- Context Note Box with Left Red Bar -->
+                        <div class="red-bar-left text-xs sm:text-sm text-brandOffWhite opacity-80 pt-1 pb-1 font-sans">
+                            Context matters: a helpline report records people who sought help. It does not measure every incident in Pakistan, and the total should not be described as 3,012 AI cases.
+                        </div>
+                    </div>
+
+                    <!-- External Source Link -->
+                    <div class="pt-4 border-t border-[#222]">
+                        <a href="https://digitalrightsfoundation.pk/annual-helpline-report-2025/" target="_blank" rel="noopener font-mono" class="inline-flex flex-col text-brandRed hover:underline text-xs sm:text-sm group">
+                            <span class="font-mono flex items-center space-x-1 font-medium">
+                                <span>Read the Report</span>
+                                <span>↗</span>
+                            </span>
+                            <span class="text-brandGrey text-[10px] sm:text-xs break-all mt-0.5 opacity-70 group-hover:opacity-100">
+                                https://digitalrightsfoundation.pk/annual-helpline-report-2025/
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column: Case File 02 & Case File 03 (5 cols) -->
+                <div class="lg:col-span-5 flex flex-col space-y-6">
+                    
+                    <!-- Right Card 1: Case file 02 · Minors -->
+                    <div class="bg-brandCardBg border border-brandCardBorder p-8 rounded-sm flex-1 flex flex-col justify-between space-y-6 hover:border-[#383535] transition-colors">
+                        <div class="space-y-4">
+                            <span class="font-mono text-brandRed text-sm sm:text-base tracking-wide block">
+                                Case file 02 · Minors
+                            </span>
+                            <p class="font-sans text-brandOffWhite text-sm sm:text-base leading-relaxed opacity-90">
+                                DRF reported 159 complaints involving minors in 2025, compared with 124 in 2024 — a 28% increase. These are all relevant helpline complaints involving minors, not a count limited to AI misuse.
+                            </p>
+                        </div>
+                        
+                        <div class="pt-4 border-t border-[#222]">
+                            <a href="https://digitalrightsfoundation.pk/annual-helpline-report-2025/" target="_blank" rel="noopener" class="inline-flex flex-col text-brandRed hover:underline text-xs sm:text-sm group">
+                                <span class="font-mono flex items-center space-x-1 font-medium">
+                                    <span>Read the Report</span>
+                                    <span>↗</span>
+                                </span>
+                                <span class="text-brandGrey text-[10px] sm:text-xs break-all mt-0.5 opacity-70">
+                                    https://digitalrightsfoundation.pk/annual-helpline-report-2025/
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Card 2: Case file 03 · Facial Recognition -->
+                    <div class="bg-brandCardBg border border-brandCardBorder p-8 rounded-sm flex-1 flex flex-col justify-between space-y-6 hover:border-[#383535] transition-colors">
+                        <div class="space-y-4">
+                            <span class="font-mono text-brandRed text-sm sm:text-base tracking-wide block">
+                                Case file 03 · Facial recognition
+                            </span>
+                            <p class="font-sans text-brandOffWhite text-sm sm:text-base leading-relaxed opacity-90">
+                                NIST’s evaluation found demographic differences in many of the face-recognition algorithms it tested. Performance varied by algorithm, task and data; a single claim about all systems would be misleading.
+                            </p>
+                        </div>
+
+                        <div class="pt-4 border-t border-[#222]">
+                            <a href="https://www.nist.gov/publications/face-recognition-vendor-test-part-3-demographic-effects" target="_blank" rel="noopener" class="inline-flex flex-col text-brandRed hover:underline text-xs sm:text-sm group">
+                                <span class="font-mono flex items-center space-x-1 font-medium">
+                                    <span>Read the Report</span>
+                                    <span>↗</span>
+                                </span>
+                                <span class="text-brandGrey text-[10px] sm:text-xs break-all mt-0.5 opacity-70">
+                                    https://www.nist.gov/publications/face-recognition-vendor-test-part-3-demographic-effects
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 3: REPORTING, EXPLAINED (4 Columns Grid as per Screenshot 3 - 3f.png) -->
+        <section id="reporting-explained" class="space-y-8">
+            <div>
+                <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-brandOffWhite">
+                    Reporting, explained.
+                </h2>
+            </div>
+
+            <!-- 4 Grid Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Box 1: Privacy and Consent -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 rounded-sm flex flex-col justify-between space-y-6 hover:border-brandRed/50 transition-all">
+                    <div class="space-y-4">
+                        <span class="font-mono text-brandRed text-sm tracking-wide block">
+                            Privacy and Consent
+                        </span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite leading-snug">
+                            A photo is not permission for everything.
+                        </h3>
+                        <p class="font-sans text-brandGrey text-sm leading-relaxed">
+                            Uploading an image can involve processing, storage and reuse under a service’s terms. Check what the specific service says before assuming your photo will be used only once.
+                        </p>
+                    </div>
+                    <div>
+                        <button onclick="openModal('analysisModal1')" class="font-mono text-brandRed hover:underline text-sm inline-flex items-center space-x-1">
+                            <span>Read Analysis</span>
+                            <span>↗</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Box 2: Misuse of Identity and AI -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 rounded-sm flex flex-col justify-between space-y-6 hover:border-brandRed/50 transition-all">
+                    <div class="space-y-4">
+                        <span class="font-mono text-brandRed text-sm tracking-wide block">
+                            Misuse of Identity and AI
+                        </span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite leading-snug">
+                            When a face becomes raw material.
+                        </h3>
+                        <p class="font-sans text-brandGrey text-sm leading-relaxed">
+                            Deepfakes and synthetic media can be used to impersonate people. Responsible reporting separates verified incidents from viral claims and avoids repeating harmful material.
+                        </p>
+                    </div>
+                    <div>
+                        <button onclick="openModal('analysisModal2')" class="font-mono text-brandRed hover:underline text-sm inline-flex items-center space-x-1">
+                            <span>Read Analysis</span>
+                            <span>↗</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Box 3: Ethics of Ethics -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 rounded-sm flex flex-col justify-between space-y-6 hover:border-brandRed/50 transition-all">
+                    <div class="space-y-4">
+                        <span class="font-mono text-brandRed text-sm tracking-wide block">
+                            Ethics of Ethics
+                        </span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite leading-snug">
+                            Bias is a measurable system risk.
+                        </h3>
+                        <p class="font-sans text-brandGrey text-sm leading-relaxed">
+                            NIST’s research documents demographic differences in tested face-recognition algorithms. The finding supports careful evaluation, not blanket assumptions about every AI tool.
+                        </p>
+                    </div>
+                    <div>
+                        <button onclick="openModal('analysisModal3')" class="font-mono text-brandRed hover:underline text-sm inline-flex items-center space-x-1">
+                            <span>Read Analysis</span>
+                            <span>↗</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Box 4: Policy and knowledge -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 rounded-sm flex flex-col justify-between space-y-6 hover:border-brandRed/50 transition-all">
+                    <div class="space-y-4">
+                        <span class="font-mono text-brandRed text-sm tracking-wide block">
+                            Policy and knowledge
+                        </span>
+                        <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite leading-snug">
+                            A Human-centred approach to generative AI.
+                        </h3>
+                        <p class="font-sans text-brandGrey text-sm leading-relaxed">
+                            UNESCO’s guidance calls for data privacy protections, age-appropriate approaches and policies that keep human agency central in education and research.
+                        </p>
+                    </div>
+                    <div>
+                        <button onclick="openModal('analysisModal4')" class="font-mono text-brandRed hover:underline text-sm inline-flex items-center space-x-1">
+                            <span>Read Analysis</span>
+                            <span>↗</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SECTION 4: BEFORE YOU HAND OVER THE DATA (4 Dark Grid Boxes - Screenshot 4 / 4f.png) -->
+        <section id="before-handover" class="space-y-8">
+            <div>
+                <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl font-medium text-brandRed">
+                    Before You Hand Over The Data.
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 sm:p-10 rounded-sm space-y-4">
+                    <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite">
+                        Why do we need to share it?
+                    </h3>
+                    <p class="font-sans text-brandGrey text-sm sm:text-base leading-relaxed">
+                        Do not share sensitive information and personal images without any consent.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 sm:p-10 rounded-sm space-y-4">
+                    <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite">
+                        What does the service say?
+                    </h3>
+                    <p class="font-sans text-brandGrey text-sm sm:text-base leading-relaxed">
+                        Check the privacy and retention policy; Read all privacy and policies before accepting the terms and conditions.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 sm:p-10 rounded-sm space-y-4">
+                    <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite">
+                        Is someone else in the image?
+                    </h3>
+                    <p class="font-sans text-brandGrey text-sm sm:text-base leading-relaxed">
+                        Ask permission before uploading or editing identifiable images of other people.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="bg-brandCardBg border border-brandCardBorder p-8 sm:p-10 rounded-sm space-y-4">
+                    <h3 class="font-serif text-2xl sm:text-3xl font-medium text-brandOffWhite">
+                        Pause before posting.
+                    </h3>
+                    <p class="font-sans text-brandGrey text-sm sm:text-base leading-relaxed">
+                        Once content spreads, removing every copy may be difficult. Share deliberately, not under pressure.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SECTION 5: PUBLICATION MISSION & NEWSLETTER (Screenshot 5 / 5.png) -->
+        <section id="about" class="space-y-12 pt-8 border-t border-[#222]">
+            <!-- Red Headline Statement -->
+            <div>
+                <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-medium text-brandRed leading-tight max-w-4xl">
+                    Not anti-technology.<br>Pro-consent. Pro-accountability.
+                </h2>
+            </div>
+
+            <!-- Content Grid: Left Manifesto / Right Newsletter Box -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Manifesto Text (7 cols) -->
+                <div class="lg:col-span-7 space-y-6 font-sans text-brandOffWhite text-base sm:text-lg leading-relaxed opacity-90">
+                    <p>
+                        The <strong class="text-white font-semibold">IDENTITY.LAB</strong> is an independent editorial concept focused on AI misuse, image privacy, consent, identity and accountability. It aims to make complicated research easier to read without stripping away the context that makes it accurate.
+                    </p>
+                    <p>
+                        AI can support creative work, accessibility, learning and research. The point is not to pretend every use is harmful. The point is to ask whether people understand what is happening to their data, whether systems have been tested responsibly, and whether someone can be held accountable when harm occurs.
+                    </p>
+                </div>
+
+                <!-- Stay Informed Box (5 cols) -->
+                <div class="lg:col-span-5 bg-brandCardBg border border-brandCardBorder p-8 sm:p-10 rounded-sm space-y-6">
+                    <h3 class="font-serif text-3xl font-medium text-brandOffWhite">
+                        Stay Informed.
+                    </h3>
+                    <p class="font-sans text-brandGrey text-sm leading-relaxed">
+                        Get new articles, case studies and privacy tips — straight to your inbox.
+                    </p>
+
+                    <!-- Subscription Form -->
+                    <form onsubmit="handleSubscribe(event, 'footer')" class="space-y-4">
+                        <div>
+                            <input type="email" id="footerEmail" required placeholder="Your Email Address" class="w-full bg-[#121111] border border-[#333] text-brandOffWhite text-sm px-4 py-3 rounded-sm focus:outline-none focus:border-brandRed transition-colors">
+                        </div>
+                        <button type="submit" class="w-full bg-brandRed hover:bg-brandRedDark transition-colors text-white font-sans text-sm font-medium py-3 rounded-sm">
+                            Subscribe
+                        </button>
+                        <p id="footerSubMsg" class="font-mono text-xs text-green-400 hidden">✓ Thank you for subscribing to IDENTITY.LAB updates.</p>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER (Exact as Screenshot 5 bottom) -->
+    <footer class="border-t border-[#222] bg-[#0E0D0D] py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-6 space-y-8">
+            <div class="w-full h-px bg-[#222]"></div>
+            <div class="flex flex-col sm:flex-row items-center justify-between font-mono text-xs sm:text-sm text-brandGrey space-y-4 sm:space-y-0">
+                <!-- Left Brand -->
+                <div class="text-white font-bold text-lg tracking-tight">
+                    <span>IDENTITY.</span><span class="text-brandRed">LAB</span>
+                </div>
+                <!-- Right Copyright -->
+                <div>
+                    © 2026 The identity lab.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ==================== OVERLAY MODALS & EXPANDED PANELS ==================== -->
+
+    <!-- HERO MODAL / OVERLAY BOX: "Your Identity Is Not a Dataset." (Exact match to Screenshot 1 Left Box) -->
+    <div id="heroModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 hidden">
+        <div class="bg-taupeBg text-taupeText max-w-2xl w-full p-8 sm:p-12 rounded-sm relative shadow-2xl animate-modal border border-[#999]">
+            <!-- Close button -->
+            <button onclick="closeModal('heroModal')" class="absolute top-6 right-6 text-2xl text-taupeText hover:text-black transition-colors font-sans focus:outline-none" aria-label="Close modal">
+                ✕
+            </button>
+
+            <div class="space-y-6">
+                <!-- Light Box Headline -->
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white leading-tight">
+                    Your Identity Is Not a Dataset.
+                </h2>
+
+                <!-- Paragraph 1 with left red sidebar -->
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    AI systems can transform the way images, voices and personal information are created, analyzed and shared. These capabilities can support accessibility, creativity and research, but they also raise serious questions when people do not know how their information is being used.
+                </div>
+
+                <!-- Paragraph 2 with left red sidebar -->
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    Consent is more than clicking “agree.” People need understandable information about what is collected, why it is needed, how long it may be kept, and whether it may be used to train or improve a system. The answers depend on the product, its terms and the laws that apply.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DETAILED REPORT ANALYSIS MODAL 1: "A photo is not permission for everything." (Exact Screenshot 4 top / Screenshot 5) -->
+    <div id="analysisModal1" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 hidden">
+        <div class="bg-taupeBg text-taupeText max-w-2xl w-full p-8 sm:p-12 rounded-sm relative shadow-2xl animate-modal border border-[#999] max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('analysisModal1')" class="absolute top-6 right-6 text-2xl text-taupeText hover:text-black transition-colors focus:outline-none">✕</button>
+
+            <div class="space-y-6">
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white leading-tight">
+                    A photo is not permission for everything.
+                </h2>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed space-y-2">
+                    <p>
+                        A photo can reveal more than a person’s face. It may show location clues, school or workplace details, other people in the frame or private information in the background. When an image is uploaded to an online service, how it is processed depends on that service’s features, settings and terms.
+                    </p>
+                </div>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed space-y-2">
+                    <p>
+                        Before uploading, look for the service’s explanation of data retention, deletion, model improvement and whether content may be reviewed by people. Do not assume every product follows the same policy, and check the current policy rather than relying on old screenshots.
+                    </p>
+                </div>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed space-y-2">
+                    <p>
+                        Consent also involves people other than the account holder. If an image identifies a friend, classmate or family member, ask before uploading it for a transformation that they may not expect.
+                    </p>
+                </div>
+
+                <div class="pt-4 font-mono text-xs text-taupeSubtext">
+                    Questions to investigate: What data is collected? What is the stated purpose? Can a user delete it?
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DETAILED REPORT ANALYSIS MODAL 2: "When a face becomes raw material." (Exact Screenshot 5 top) -->
+    <div id="analysisModal2" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 hidden">
+        <div class="bg-taupeBg text-taupeText max-w-2xl w-full p-8 sm:p-12 rounded-sm relative shadow-2xl animate-modal border border-[#999] max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('analysisModal2')" class="absolute top-6 right-6 text-2xl text-taupeText hover:text-black transition-colors focus:outline-none">✕</button>
+
+            <div class="space-y-6">
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white leading-tight">
+                    When a face becomes raw material.
+                </h2>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    Generative systems can create or alter images, audio and video. Misuse can include impersonation, deceptive fabricated media or non-consensual manipulation of someone’s likeness. The technology alone does not tell us whether a particular clip is real; verification requires context and evidence.
+                </div>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    When documenting an incident, find the earliest credible report, check whether the affected person or an institution has commented, and distinguish allegations from confirmed findings. Avoid republishing humiliating or intimate material: repeating it can cause further harm.
+                </div>
+
+                <div class="pt-4 font-mono text-xs text-taupeSubtext">
+                    Questions for a case study: What is independently verified? Who was affected? What did the platform do? What protections or reporting routes were available? What remains unknown?
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DETAILED REPORT ANALYSIS MODAL 3: "Bias is a measurable system risk." (Exact Screenshot 4 bottom) -->
+    <div id="analysisModal3" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 hidden">
+        <div class="bg-taupeBg text-taupeText max-w-2xl w-full p-8 sm:p-12 rounded-sm relative shadow-2xl animate-modal border border-[#999] max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('analysisModal3')" class="absolute top-6 right-6 text-2xl text-taupeText hover:text-black transition-colors focus:outline-none">✕</button>
+
+            <div class="space-y-6">
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white leading-tight">
+                    Bias is a measurable system risk.
+                </h2>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    The US National Institute of Standards and Technology (NIST) evaluated face-recognition algorithms and reported demographic differences in many of the algorithms tested. NIST also explains that performance depends on the algorithm, task and data; the findings should not be flattened into a claim that every system behaves identically.
+                </div>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    The ethical implication is practical: systems used in consequential settings need testing across relevant groups, clear documentation and a process for challenging errors. A vendor’s broad accuracy claim is not a substitute for evidence about a particular deployment.
+                </div>
+
+                <div class="pt-4">
+                    <a href="https://www.nist.gov/publications/face-recognition-vendor-test-part-3-demographic-effects" target="_blank" rel="noopener" class="font-mono text-xs text-brandRed hover:underline">
+                        Read NIST Evaluation Report ↗
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- DETAILED REPORT ANALYSIS MODAL 4: "A Human-centred approach to generative AI." (Exact Screenshot 5 bottom) -->
+    <div id="analysisModal4" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6 hidden">
+        <div class="bg-taupeBg text-taupeText max-w-2xl w-full p-8 sm:p-12 rounded-sm relative shadow-2xl animate-modal border border-[#999] max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('analysisModal4')" class="absolute top-6 right-6 text-2xl text-taupeText hover:text-black transition-colors focus:outline-none">✕</button>
+
+            <div class="space-y-6">
+                <h2 class="font-serif text-3xl sm:text-4xl font-semibold text-white leading-tight">
+                    A Human-centred approach to generative AI.
+                </h2>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    UNESCO’s guidance for generative AI in education and research advocates a human-centred approach. It discusses data privacy, age-appropriate use and the need for institutions to develop policies and capacity as tools evolve.
+                </div>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    The guidance does not say that every use of AI should be prohibited. Instead, it frames questions about how systems are validated, how people’s data is protected, and how educational use can remain appropriate and meaningful.
+                </div>
+
+                <div class="red-bar-left text-white/90 text-sm sm:text-base font-sans leading-relaxed">
+                    For a school or family policy, useful discussion points include: what tools are allowed, what information must never be entered, what age restrictions apply, when an adult should be involved, and how students can report a concern.
+                </div>
+
+                <div class="pt-4 space-y-1">
+                    <div class="font-mono text-xs text-taupeSubtext">Read UNESCO’s guidelines:</div>
+                    <a href="https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research" target="_blank" rel="noopener" class="font-mono text-xs text-brandRed hover:underline break-all">
+                        https://www.unesco.org/en/articles/guidance-generative-ai-education-and-research
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- GENERAL SUBSCRIBE MODAL -->
+    <div id="subscribeModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-brandCardBg border border-brandCardBorder max-w-md w-full p-8 rounded-sm relative shadow-2xl animate-modal space-y-6">
+            <button onclick="closeModal('subscribeModal')" class="absolute top-6 right-6 text-xl text-brandGrey hover:text-white focus:outline-none">✕</button>
+            
+            <h3 class="font-serif text-3xl text-brandOffWhite">
+                Stay Informed with IDENTITY.LAB
+            </h3>
+            <p class="font-sans text-brandGrey text-sm">
+                Receive independent research and investigative case updates directly in your inbox.
+            </p>
+
+            <form onsubmit="handleSubscribe(event, 'modal')" class="space-y-4">
+                <input type="email" id="modalEmail" required placeholder="Enter your email address" class="w-full bg-[#121111] border border-[#333] text-brandOffWhite text-sm px-4 py-3 rounded-sm focus:outline-none focus:border-brandRed">
+                <button type="submit" class="w-full bg-brandRed hover:bg-brandRedDark text-white font-sans text-sm py-3 rounded-sm font-medium">
+                    Confirm Subscription
+                </button>
+                <p id="modalSubMsg" class="font-mono text-xs text-green-400 hidden">✓ You are now subscribed to IDENTITY.LAB</p>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT FOR INTERACTION -->
+    <script>
+        // Modal Control Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scroll
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Restore scroll
+            }
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modals = ['heroModal', 'analysisModal1', 'analysisModal2', 'analysisModal3', 'analysisModal4', 'subscribeModal'];
+                modals.forEach(closeModal);
+            }
+        });
+
+        // Toggle Header Navigation Drawer
+        function toggleNavMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('hidden');
+        }
+
+        // Subscription Handling
+        function handleSubscribe(e, source) {
+            e.preventDefault();
+            if (source === 'footer') {
+                const email = document.getElementById('footerEmail').value;
+                if (email) {
+                    const msg = document.getElementById('footerSubMsg');
+                    msg.classList.remove('hidden');
+                    document.getElementById('footerEmail').value = '';
+                }
+            } else if (source === 'modal') {
+                const email = document.getElementById('modalEmail').value;
+                if (email) {
+                    const msg = document.getElementById('modalSubMsg');
+                    msg.classList.remove('hidden');
+                    setTimeout(() => {
+                        closeModal('subscribeModal');
+                        msg.classList.add('hidden');
+                        document.getElementById('modalEmail').value = '';
+                    }, 1800);
+                }
+            }
+        }
+
+        // Search Filter Logic across site topics
+        const searchableItems = [
+            { title: "Your Identity Is Not a Dataset", target: "hero" },
+            { title: "Pakistan Digital Rights Foundation Helpline Report 2025", target: "case-files" },
+            { title: "NIST Demographic Effects in Face Recognition", target: "case-files" },
+            { title: "A photo is not permission for everything", target: "reporting-explained" },
+            { title: "When a face becomes raw material", target: "reporting-explained" },
+            { title: "Bias is a measurable system risk", target: "reporting-explained" },
+            { title: "UNESCO Human-centred approach to generative AI", target: "reporting-explained" },
+            { title: "Before You Hand Over The Data", target: "before-handover" }
+        ];
+
+        function filterArticles() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (!query) {
+                resultsDiv.classList.add('hidden');
+                resultsDiv.innerHTML = '';
+                return;
+            }
+
+            const matches = searchableItems.filter(item => item.title.toLowerCase().includes(query));
+            
+            if (matches.length > 0) {
+                resultsDiv.innerHTML = matches.map(m => `
+                    <div onclick="navigateToResult('${m.target}')" class="p-3 hover:bg-brandRed hover:text-white cursor-pointer border-b border-[#222]">
+                        ${m.title}
+                    </div>
+                `).join('');
+                resultsDiv.classList.remove('hidden');
+            } else {
+                resultsDiv.innerHTML = `<div class="p-3 text-brandGrey">No matching analysis found</div>`;
+                resultsDiv.classList.remove('hidden');
+            }
+        }
+
+        function navigateToResult(targetId) {
+            document.getElementById('searchResults').classList.add('hidden');
+            document.getElementById('searchInput').value = '';
+            toggleNavMenu();
+            const elem = document.getElementById(targetId);
+            if (elem) {
+                elem.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>
